@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'><link rel="stylesheet" href="style.css">
+    <title>Click Game</title>
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!-- start play section -->
+    <section class="screen play-screen">
+        <!-- header -->
+        <h1>Click</h1>
+        <!-- play button -->
+        <button class="play-btn" id="play-btn">Play</button>
+    </section>
+    <!-- end play section -->
+
+    <!-- start select section -->
+    <section class="screen select-screen">
+        <!-- header -->
+        <h1>Select what you want to click.</h1>
+
+        <!-- start select option container-->
+        <div class="select-option-container">
+            <!-- start option div -->
+            <div class="option">
+                <div class="icon"><i class="fas fa-paw"></i></div>
+
+                <p class="option-name">Animal</p>
+            </div>
+            <!-- end option div -->
+
+            <!-- start option div -->
+            <div class="option">
+                <div class="icon"><i class="fas fa-cubes"></i></div>
+
+                <p class="option-name">Object</p>
+            </div>
+            <!-- end option div -->
+
+            <!-- start option div -->
+            <div class="option">
+                <div class="icon"><i class="fab fa-amilia"></i></div>
+
+                <p class="option-name">Letter</p>
+            </div>
+            <!-- end option div -->
+
+            <!-- start option div -->
+            <div class="option">
+                <div class="icon"><i class="fas fa-sort-numeric-up-alt"></i></div>
+
+                <p class="option-name">Number</p>
+            </div>
+            <!-- end option div-->
+        </div>
+        <!-- end select option container-->
+
+    </section>
+    <!-- end select-screen -->
+
+    <!-- start game section -->
+    <section class="screen game-screen">
+        <!-- time -->
+        <h3 class="time">Time : <span id="time">00:00</span></h3>
+
+        <!-- score -->
+        <h3 class="score">Score : <span id="score">00</span></h3>
+
+        <!-- start message -->
+        <div class="message" id="message">
+            <p>Are you annoyed with this game? This game doesn't have an end.<br>Would you like to stop this game?</p>
+
+            <div class="btn-container">
+                <button class="message-btn" id="yes-btn">Yes</button>
+                <button class="message-btn" id="no-btn">No</button>
+            </div>
+        </div>
+        <!-- end message -->
+    </section>
+    <!-- end games section -->
+<!-- partial -->
+  <script  src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+*:focus{
+    outline: none;
+}
+
+*::-moz-focus-inner,
+*::-moz-focus-outer{
+    outline: none;
+}
+
+html,body{
+    overflow: hidden;
+}
+
+body{
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    user-select: none;
+}
+
+.screen{
+    font-family: 'Poppins', sans-serif;
+    background-color: rgb(0, 124, 233);
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    transition: 0.6s ease;
+}
+
+.play-screen{
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: aliceblue;
+}
+
+.play-screen h1{
+    text-align: center;
+    margin: 20px 0px;
+}
+
+.play-btn{
+    cursor: pointer;
+    border: none;
+    font-family: inherit;
+    color: aliceblue;
+    background: rgb(0, 124, 233);
+    border: 1px solid aliceblue;
+    padding: 7px 15px;
+    font-size: 19px;
+    transition: 0.3s ease;
+}
+
+.play-btn:hover{
+    color : rgb(0, 124, 233) ;
+    background: aliceblue;
+}
+
+.select-screen{
+    z-index: 9;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.select-screen h1{
+    font-size: 20px;
+    color: aliceblue;
+    margin-bottom: 30px;
+}
+
+.select-option-container{
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap ;
+    justify-content: center;
+    align-items: center;
+}
+
+.option{
+    min-width: 100px;
+    min-height: 100px;
+    border: 1px solid aliceblue;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    color: aliceblue;
+    margin: 10px;
+    user-select: none;
+    transition: 0.3s ease;
+}
+
+.icon i{
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.option:hover{
+    background-color: aliceblue;
+    color: rgb(0, 124, 233);
+}
+
+.game-screen{
+    z-index: 8;
+    position: relative;
+}
+
+.time,.score{
+    position: absolute;
+    top: 20px;
+    color: aliceblue;
+}
+
+.time{
+    left: 20px;
+    user-select: none;
+}
+
+.score{
+    right: 20px;
+    user-select: none;
+}
+
+.message{
+    position: absolute;
+    z-index: 11;
+    top: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.336);
+    padding: 20px 0px;
+    color: aliceblue;
+    transform: translateY(-300%);
+    transition: 0.5s ease;
+}
+
+.message p{
+    text-align: center;
+    user-select: none;
+}
+
+.btn-container{
+    margin-top: 30px;
+}
+
+.message-btn{
+    margin: 0px 10px;
+    padding: 7px 15px ;
+    color: aliceblue;
+    background-color: rgb(0, 124, 233);
+    font-family: inherit;
+    border: 1px solid aliceblue;
+    cursor: pointer;    
+    transition: 0.3s ease;
+}
+
+.game-screen .show-message{
+    transform: translateY(0%);
+}
+
+.message-btn:hover{
+    color: rgb(0, 124, 233);
+    background-color: aliceblue;
+}
+
+.game-object{
+    position: absolute;
+    top: 200px;
+    left: 200px;
+    transform: translate(-50%,-50%) scale(1);
+    animation: show-object 0.3s ease-in-out;
+}
+
+.game-screen .hide-object{
+    transform: translate(-50%,-50%) scale(1);
+    animation: hide-object 0.3s ease-in-out forwards;
+}
+
+.game-object p{
+    cursor: pointer;
+    color: aliceblue;
+    font-size: 40px;
+    transform: rotate(150deg);
+    user-select: none;
+}
+
+body .up-screen{
+    transform: translate(0%,-100%);
+}
+
+@keyframes show-object {
+    from{
+        transform: translate(-50%,-50%) scale(0);
+    }
+    
+    to{
+        transform: translate(-50%,-50%) scale(1);
+    }
+}
+
+@keyframes hide-object {
+    from{
+        transform: translate(-50%-50%) scale(1);
+    }
+
+    to{
+        transform: translate(-50%,-50%) scale(0);
+    }
+}
+
+@media (max-width: 390px) {
+    .play-screen h1{
+        font-size: 20px;
+    }
+
+    .game-object p{
+        cursor: pointer;
+        color: aliceblue;
+        font-size: 20px;
+        transform: rotate(150deg);
+    }
+}
+
+@media (max-width : 320px) {
+    .play-screen h1{
+        font-size: 16px;
+    }
+
+    .time,.score{
+        font-size: 14px;
+    }
+}

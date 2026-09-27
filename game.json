@@ -1,8 +1,14 @@
 {
+  "$schema": "https://raw.githubusercontent.com/pewplay/pewplay/main/schema/game.schema.json",
   "title": "Click Game",
   "description": "Test your reflexes and see how fast you can click.",
-  "keywords": ["clicker", "casual", "speed", "reflexes"],
   "category": "Casual",
+  "tags": [
+    "clicker",
+    "casual",
+    "speed",
+    "reflexes"
+  ],
   "author": "PewPlay",
   "playMode": "SinglePlayer"
 }

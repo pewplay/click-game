@@ -2,6 +2,28 @@
   "$schema": "https://raw.githubusercontent.com/pewplay/pewplay/main/schema/game.schema.json",
   "title": "Click Game",
   "description": "Test your reflexes and see how fast you can click.",
+  "about": "Click Game is a browser game where you choose a target category, press Play and click the requested items to build a score.\n\nStart a round in your browser and use the controls below to play.",
+  "howToPlay": "Choose a target category, press Play and click the requested items to build a score.",
+  "controls": [
+    {
+      "input": "Click / tap",
+      "action": "Choose a category and select targets"
+    }
+  ],
+  "tips": [
+    "Use click / tap to choose a category and select targets.",
+    "Try another round to practice the timing and strategy."
+  ],
+  "faq": [
+    {
+      "question": "How do I play Click Game?",
+      "answer": "Choose a target category, press Play and click the requested items to build a score."
+    },
+    {
+      "question": "Can I play Click Game in a browser?",
+      "answer": "Yes. Open the game page and play without installing an app."
+    }
+  ],
   "category": "Casual",
   "tags": [
     "clicker",
@@ -9,6 +31,9 @@
     "speed",
     "reflexes"
   ],
-  "author": "PewPlay",
-  "playMode": "SinglePlayer"
+  "playMode": "SinglePlayer",
+  "orientation": "any",
+  "cover": "cover.png",
+  "draft": true,
+  "author": "PewPlay"
 }

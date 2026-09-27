@@ -17,6 +17,8 @@
 
 html,body{
     overflow: hidden;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body{
@@ -187,6 +189,7 @@ body{
     left: 200px;
     transform: translate(-50%,-50%) scale(1);
     animation: show-object 0.3s ease-in-out;
+    padding: 10px; /* larger tap area */
 }
 
 .game-screen .hide-object{

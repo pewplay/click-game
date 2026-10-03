@@ -1,89 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css'><link rel="stylesheet" href="style.css">
-    <title>Click Game</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#007ce9">
+  <title>Click Game</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- partial:index.partial.html -->
-<!-- start play section -->
-    <section class="screen play-screen">
-        <!-- header -->
-        <h1>Click</h1>
-        <!-- play button -->
-        <button class="play-btn" id="play-btn">Play</button>
+  <main id="app">
+    <!-- Start screen -->
+    <section class="screen play-screen" id="play-screen">
+      <h1 class="logo">Click</h1>
+      <p class="tagline">Pop the symbols. As many as you can.</p>
+      <button class="btn btn-big" id="play-btn" type="button">Play</button>
+      <p class="best-line" id="best-line" hidden>Best: <strong id="best-start">0</strong></p>
     </section>
-    <!-- end play section -->
 
-    <!-- start select section -->
-    <section class="screen select-screen">
-        <!-- header -->
-        <h1>Select what you want to click.</h1>
+    <!-- Category screen -->
+    <section class="screen select-screen" id="select-screen">
+      <h2>What do you want to click?</h2>
+      <div class="select-option-container" id="options">
+        <button class="option" type="button" data-cat="animal"><span class="icon" data-icon="paw"></span><span class="option-name">Animals</span></button>
+        <button class="option" type="button" data-cat="object"><span class="icon" data-icon="cubes"></span><span class="option-name">Objects</span></button>
+        <button class="option" type="button" data-cat="letter"><span class="icon" data-icon="font"></span><span class="option-name">Letters</span></button>
+        <button class="option" type="button" data-cat="number"><span class="icon" data-icon="arrow-up-9-1"></span><span class="option-name">Numbers</span></button>
+      </div>
+      <button class="btn btn-ghost" id="back-btn" type="button">Back</button>
+    </section>
 
-        <!-- start select option container-->
-        <div class="select-option-container">
-            <!-- start option div -->
-            <div class="option">
-                <div class="icon"><i class="fas fa-paw"></i></div>
+    <!-- Game screen -->
+    <section class="screen game-screen" id="game-screen">
+      <div class="hud">
+        <div class="hud-item">Time <span id="time">00:00</span></div>
+        <div class="hud-item">Score <span id="score">0</span></div>
+        <button class="hud-btn" id="end-btn" type="button" aria-label="End game" title="End game"><span data-icon="xmark"></span></button>
+      </div>
+      <div class="field" id="field"></div>
+      <div class="hint" id="hint">Tap the symbols!</div>
 
-                <p class="option-name">Animal</p>
-            </div>
-            <!-- end option div -->
-
-            <!-- start option div -->
-            <div class="option">
-                <div class="icon"><i class="fas fa-cubes"></i></div>
-
-                <p class="option-name">Object</p>
-            </div>
-            <!-- end option div -->
-
-            <!-- start option div -->
-            <div class="option">
-                <div class="icon"><i class="fab fa-amilia"></i></div>
-
-                <p class="option-name">Letter</p>
-            </div>
-            <!-- end option div -->
-
-            <!-- start option div -->
-            <div class="option">
-                <div class="icon"><i class="fas fa-sort-numeric-up-alt"></i></div>
-
-                <p class="option-name">Number</p>
-            </div>
-            <!-- end option div-->
+      <!-- Checkpoint every 50 points -->
+      <div class="overlay" id="message" hidden>
+        <div class="card">
+          <p class="card-big" id="checkpoint-score">50</p>
+          <p>points! This game never ends on its own.<br>Do you want to stop here?</p>
+          <div class="btn-row">
+            <button class="btn" id="no-btn" type="button">Keep going</button>
+            <button class="btn btn-ghost" id="yes-btn" type="button">Stop</button>
+          </div>
         </div>
-        <!-- end select option container-->
+      </div>
 
-    </section>
-    <!-- end select-screen -->
-
-    <!-- start game section -->
-    <section class="screen game-screen">
-        <!-- time -->
-        <h3 class="time">Time : <span id="time">00:00</span></h3>
-
-        <!-- score -->
-        <h3 class="score">Score : <span id="score">00</span></h3>
-
-        <!-- start message -->
-        <div class="message" id="message">
-            <p>Are you annoyed with this game? This game doesn't have an end.<br>Would you like to stop this game?</p>
-
-            <div class="btn-container">
-                <button class="message-btn" id="yes-btn">Yes</button>
-                <button class="message-btn" id="no-btn">No</button>
-            </div>
+      <!-- Results -->
+      <div class="overlay" id="results" hidden>
+        <div class="card">
+          <h2 id="result-title">Well clicked!</h2>
+          <div class="stats">
+            <div><span class="stat-label">Score</span><span class="stat-val" id="final-score">0</span></div>
+            <div><span class="stat-label">Time</span><span class="stat-val" id="final-time">00:00</span></div>
+            <div><span class="stat-label">Best</span><span class="stat-val" id="final-best">0</span></div>
+          </div>
+          <p class="new-best" id="new-best" hidden>New best score!</p>
+          <div class="btn-row">
+            <button class="btn" id="again-btn" type="button">Play again</button>
+            <button class="btn btn-ghost" id="menu-btn" type="button">Menu</button>
+          </div>
         </div>
-        <!-- end message -->
-    </section>
-    <!-- end games section -->
-<!-- partial -->
-  <script  src="script.js"></script>
+      </div>
 
+      <!-- Pause (page hidden) -->
+      <div class="overlay" id="paused" hidden>
+        <div class="card">
+          <h2>Paused</h2>
+          <div class="btn-row"><button class="btn" id="resume-btn" type="button">Resume</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="icons.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -2,23 +2,27 @@
   "$schema": "https://raw.githubusercontent.com/pewplay/pewplay/main/schema/game.schema.json",
   "title": "Click Game",
   "description": "Pick animals, objects, letters or numbers and click the colorful symbols that pop up across the screen in this endless free browser clicker.",
-  "about": "Click Game is a simple, endless clicker with a cheerful blue background. Before you start you choose what you want to click: animals, everyday objects, letters or numbers. Symbols then pop up at random spots in random colors and angles, and every one you click shrinks away and adds a point to your score.\n\nThe fun is in the rhythm. Each click spawns a growing burst of new symbols until the screen is full, then the flood pauses while you clear the board, and the cycle starts again. A timer counts how long you have been playing, and every 50 points the game politely asks if you want to stop or keep going.\n\nThere is no way to lose, which makes it a relaxing way to pass a few minutes, a handy mouse or touch warm-up, and an easy first game for young kids learning letters and numbers.",
-  "howToPlay": "Press Play, then choose Animal, Object, Letter or Number. Click or tap the symbols as they appear to score a point for each one. The game never ends on its own: every 50 points you can choose Yes to stop and return to the start screen, or No to keep clicking.",
+  "about": "Click Game is a simple, endless clicker with a cheerful blue background. Before you start you choose what you want to click: animals, everyday objects, letters or numbers. Symbols then pop up at random spots in random colors and angles, and every one you click or tap shrinks away and adds a point to your score.\n\nThe fun is in the rhythm. Each pop spawns a growing burst of new symbols until the screen is full, then the flood pauses while you clear the board, and the cycle starts again. A timer counts how long you have been playing, and every 50 points the game asks whether you want to stop or keep going. Your best score is saved on your device.\n\nThere is no way to lose, which makes it a relaxing way to pass a few minutes, a handy mouse or touch warm-up, and an easy first game for young kids learning letters and numbers.",
+  "howToPlay": "Press Play, then choose Animals, Objects, Letters or Numbers. Click or tap the symbols as they appear to score a point for each one. The game never ends on its own: every 50 points you can pick Keep going or Stop, and the X button in the top corner ends the round at any time. The results screen shows your score, time and best score, with buttons to play again or go back to the menu.",
   "controls": [
     {
       "input": "Click / Tap",
       "action": "Pop a symbol and score a point"
     },
     {
-      "input": "Click / Tap buttons",
-      "action": "Choose a category and answer Yes / No"
+      "input": "X button",
+      "action": "End the round and see your results"
+    },
+    {
+      "input": "Esc",
+      "action": "Pause or resume"
     }
   ],
   "tips": [
     "Clear symbols near the edges first so the middle stays easy to reach.",
-    "Every click early in a cycle spawns more symbols, so expect the screen to fill up fast.",
+    "Every pop early in a cycle spawns more symbols, so expect the screen to fill up fast.",
     "Letters and numbers make a nice recognition game for kids: call out each one before tapping it.",
-    "Pick No at each 50-point checkpoint to see how high you can push your score and time."
+    "Pick Keep going at each 50-point checkpoint to beat your best score."
   ],
   "faq": [
     {
@@ -27,11 +31,11 @@
     },
     {
       "question": "Does it work on phones and tablets?",
-      "answer": "Yes. Just tap the symbols instead of clicking; on small phones the symbols are smaller, so it takes a steadier finger."
+      "answer": "Yes. Just tap the symbols: they react the moment your finger touches the screen, and the game fills the screen in portrait and landscape."
     },
     {
       "question": "Does the game ever end?",
-      "answer": "No, it is endless. Every 50 points it asks whether you want to stop, and choosing Yes resets the score and timer."
+      "answer": "No, it is endless. Every 50 points it asks whether you want to stop, and you can end a round at any time with the X button. Your best score is saved in your browser."
     }
   ],
   "category": "Casual",
@@ -49,6 +53,7 @@
   "cover": "cover.png",
   "screenshots": [
     "screenshots/1.png",
-    "screenshots/2.png"
+    "screenshots/2.png",
+    "screenshots/3.png"
   ]
 }

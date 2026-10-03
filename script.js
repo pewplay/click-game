@@ -1,318 +1,305 @@
-let data = {
-    animal : [
-        '<i class="fas fa-cat"></i>',
-        '<i class="fas fa-crow"></i>',
-        '<i class="fas fa-dog"></i>',
-        '<i class="fas fa-dove"></i>',
-        '<i class="fas fa-dragon"></i>',
-        '<i class="fas fa-fish"></i>',
-        '<i class="fas fa-frog"></i>',
-        '<i class="fas fa-hippo"></i>',
-        '<i class="fas fa-horse"></i>',
-        '<i class="fas fa-horse-head"></i>',
-        '<i class="fas fa-kiwi-bird"></i>',
-        '<i class="fas fa-otter"></i>',
-        '<i class="fas fa-spider"></i>'
-    ],
-    object : [
-        '<i class="fab fa-youtube"></i>',
-        '<i class="fas fa-tv"></i>',
-        '<i class="fas fa-microphone-alt"></i>',
-        '<i class="fas fa-play"></i>',
-        '<i class="far fa-hand-point-down"></i>',
-        '<i class="fas fa-oil-can"></i>',
-        '<i class="fas fa-motorcycle"></i>',
-        '<i class="fas fa-car-side"></i>',
-        '<i class="fas fa-car"></i>',
-        '<i class="fas fa-bus-alt"></i>',
-        '<i class="fas fa-bus"></i>',
-        '<i class="fas fa-ambulance"></i>',
-        '<i class="fas fa-truck-pickup"></i>',
-        '<i class="fas fa-truck-monster"></i>',
-        '<i class="fas fa-truck"></i>',
-        '<i class="fas fa-trailer"></i>',
-        '<i class="fas fa-taxi"></i>',
-        '<i class="fas fa-shuttle-van"></i>',
-        '<i class="fas fa-apple-alt"></i>',
-        '<i class="fas fa-drumstick-bite"></i>',
-        '<i class="fas fa-football-ball"></i>',
-        '<i class="fas fa-tree"></i>',
-        '<i class="fas fa-tractor"></i>',
-        '<i class="fas fa-mountain"></i>',
-        '<i class="fas fa-glass-martini"></i>',
-        '<i class="fas fa-beer"></i>',
-        '<i class="fas fa-coffee"></i>',
-        '<i class="fas fa-flask"></i>',
-        '<i class="fas fa-wine-glass-alt"></i>',
-        '<i class="fas fa-clinic-medical"></i>',
-        '<i class="fas fa-birthday-cake"></i>',
-        '<i class="fas fa-calculator"></i>',
-        '<i class="fas fa-cut"></i>'
-    ],
-    letter : 'ABCDEFGHIKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-    number : [
-        '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9'
-    ],
-    colors : [
-        '#f4dbb0',
-        '#ff1515',
-        '#035c87',
-        '#e1eeff',
-        '#272951',
-        '#1f7150',
-        '#484e75',
-        '#5e4474',
-        '#c5e6a6',
-        '#3bbf45',
-        '#e5d5c1',
-        '#231a4f',
-        '#ecefe9',
-        '#322671',
-        '#0a0a15',
-        '#e3c7cb',
-        '#6015a1',
-        '#3d4c70',
-        '#ffaacc'
+(function () {
+  'use strict';
+
+  // ---------- data ----------
+  var data = {
+    animal: Object.keys(ICONS.animal),
+    object: Object.keys(ICONS.object),
+    letter: 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split(''),
+    number: '0123456789'.split(''),
+    colors: [
+      '#f4dbb0', '#ff1515', '#ffe066', '#e1eeff', '#272951', '#1f7150', '#484e75',
+      '#5e4474', '#c5e6a6', '#3bbf45', '#e5d5c1', '#231a4f', '#ecefe9', '#322671',
+      '#0a0a15', '#e3c7cb', '#6015a1', '#ff7a1a', '#ffaacc'
     ]
-}
+  };
 
-// create games object
-const games = {};
+  // ---------- storage (prefixed keys) ----------
+  var KEY_BEST = 'click-game:best';
+  function load(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+  function save(key, val) { try { localStorage.setItem(key, String(val)); } catch (e) { /* ignore */ } }
+  var best = parseInt(load(KEY_BEST), 10) || 0;
 
-// track element
-games.object = {
-    startScreen : document.querySelector('.play-screen'),
-    optionScreen : document.querySelector('.select-screen'),
-    gameScreen : document.querySelector('.game-screen'),
-    playButton : document.getElementById('play-btn'),
-    optionButtons : document.querySelectorAll('.option'),
-    timeSpan : document.getElementById('time'),
-    scoreSpan : document.getElementById('score') ,
-    message : document.getElementById('message'),
-    noButton : document.getElementById('no-btn'),
-    yseButton : document.getElementById('yes-btn')
-}
+  // ---------- elements ----------
+  var $ = function (id) { return document.getElementById(id); };
+  var el = {
+    startScreen: $('play-screen'),
+    optionScreen: $('select-screen'),
+    gameScreen: $('game-screen'),
+    field: $('field'),
+    time: $('time'),
+    score: $('score'),
+    message: $('message'),
+    checkpointScore: $('checkpoint-score'),
+    results: $('results'),
+    paused: $('paused'),
+    hint: $('hint'),
+    bestLine: $('best-line'),
+    bestStart: $('best-start'),
+    finalScore: $('final-score'),
+    finalTime: $('final-time'),
+    finalBest: $('final-best'),
+    newBest: $('new-best')
+  };
 
-// games asset object
-games.asset = {
-    time : 0,
-    objectList : null,
-    objectListLength : 0,
-    timeInterval : null,
-    colorList : data.colors,
-    colorListLength : data.colors.length,
-    score : 0,
-    killCountTrack : 1
-}
+  function svgIcon(name, group) {
+    var g = group ? ICONS[group] : null;
+    var d = (g && g[name]) || ICONS.ui[name] || ICONS.animal[name] || ICONS.object[name];
+    if (!d) return '';
+    return '<svg viewBox="0 0 ' + d[0] + ' ' + d[1] + '" aria-hidden="true"><path d="' + d[2] + '"/></svg>';
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-icon]'), function (n) {
+    n.innerHTML = svgIcon(n.getAttribute('data-icon'), 'ui');
+  });
 
-// create game function object
-games.gameFunctions = {};
+  // ---------- state ----------
+  var state = {
+    category: null,
+    list: null,
+    score: 0,
+    elapsed: 0,          // ms
+    lastTick: 0,
+    running: false,      // timer running
+    playing: false,      // inside a round
+    killCountTrack: 1,
+    timerId: null,
+    spawnTimeout: null
+  };
 
-// play function
-games.gameFunctions.play = ()=>{
-    // hide the startScreen from client
-    games.object.startScreen.classList.add('up-screen');
-}
+  function fmtTime(ms) {
+    var s = Math.floor(ms / 1000);
+    var m = Math.floor(s / 60);
+    s -= m * 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
 
-// selectOne function
-games.gameFunctions.selectOne = option=>{
-    // find option name from option and set game objectList and lenght
-    let optionName = option.querySelector('p').innerText.toLowerCase();
-    games.asset.objectList = data[optionName];
-    games.asset.objectListLength = games.asset.objectList.length;
+  function updateBestLine() {
+    el.bestLine.hidden = best <= 0;
+    el.bestStart.textContent = best;
+  }
+  updateBestLine();
 
-    // hide option secreen and call startGames function
-    games.object.optionScreen.classList.add('up-screen');
-    games.gameFunctions.startGames()
-}
+  // ---------- timer ----------
+  function tick() {
+    if (!state.running) return;
+    var now = performance.now();
+    state.elapsed += now - state.lastTick;
+    state.lastTick = now;
+    el.time.textContent = fmtTime(state.elapsed);
+  }
+  function startTimer() {
+    if (state.running) return;
+    state.running = true;
+    state.lastTick = performance.now();
+    clearInterval(state.timerId);
+    state.timerId = setInterval(tick, 250);
+  }
+  function stopTimer() {
+    tick();
+    state.running = false;
+    clearInterval(state.timerId);
+  }
 
-// start timing function
-games.gameFunctions.startTiming = ()=>{
-    // calculate secound and minute
-    let times = games.asset.time++;
-    let minutes = Math.floor(times/60);
-    let secounds = times - minutes*60;
-    let minutesStringForm = minutes < 10 ? '0'+minutes : `${minutes}`;
-    let secoundsStringForm = secounds < 10 ? '0'+secounds : `${secounds}`;
+  // ---------- symbol size & positions ----------
+  function symSize() {
+    var w = el.field.clientWidth, h = el.field.clientHeight;
+    var s = Math.round(Math.min(w, h) * 0.085);
+    return Math.max(34, Math.min(64, s));
+  }
+  function applySymSize() {
+    document.documentElement.style.setProperty('--sym', symSize() + 'px');
+  }
+  applySymSize();
+  window.addEventListener('resize', function () {
+    applySymSize();
+    // keep existing symbols inside the field after a resize/rotation
+    var w = el.field.clientWidth, h = el.field.clientHeight;
+    Array.prototype.forEach.call(el.field.children, function (o) {
+      if (o.dataset.fx) {
+        o.style.left = (parseFloat(o.dataset.fx) * w) + 'px';
+        o.style.top = (parseFloat(o.dataset.fy) * h) + 'px';
+      }
+    });
+    clampAll();
+  });
 
-    // update time in ui
-    games.object.timeSpan.innerText = `${minutesStringForm}:${secoundsStringForm}`
-}
+  function getRandomPosition() {
+    var w = el.field.clientWidth, h = el.field.clientHeight;
+    var half = symSize() / 2 + 8;
+    var top = 56 + half;                         // keep clear of the HUD
+    var x = half + Math.random() * Math.max(1, w - half * 2);
+    var y = top + Math.random() * Math.max(1, h - top - half);
+    return [x, y];
+  }
+  function clampAll() {
+    var w = el.field.clientWidth, h = el.field.clientHeight;
+    var half = symSize() / 2 + 8;
+    Array.prototype.forEach.call(el.field.children, function (o) {
+      var x = Math.min(Math.max(parseFloat(o.style.left), half), w - half);
+      var y = Math.min(Math.max(parseFloat(o.style.top), 56 + half), h - half);
+      o.style.left = x + 'px';
+      o.style.top = y + 'px';
+    });
+  }
 
-// getRandomPositin function
-games.gameFunctions.getRandomPosition = ()=>{
-    // get Width and height
-    let width = games.object.gameScreen.offsetWidth - 40;
-    let height = games.object.gameScreen.offsetHeight - 90;
+  // ---------- objects ----------
+  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
-    // create random x and y
-    let x = Math.random()*width + 20;
-    let y = Math.random()*height + 70;
-
-    // create left and top position and return them as array
-    let positionLeft = x+'px';
-    let positionTop = y+'px';
-    
-    return [positionLeft,positionTop]
-}
-
-// deleteObject function
-games.gameFunctions.deleteObject = object=>{
-    // add hide-object class and delete 400milisecound letter
-    object.classList.add('hide-object');
-    setTimeout(()=>{
-        object.remove();
-    },400);
-}
-
-// kill funcitons
-games.gameFunctions.kill = object=>{
-    // delete object
-    games.gameFunctions.deleteObject(object);
-
-    // update score in ui and update kill count track
-    let score = ++games.asset.score;
-    let scoreString = score < 10 ? '0'+score : `${score}`;
-    games.object.scoreSpan.innerText = scoreString;
-    let killCountTrack = ++games.asset.killCountTrack;
-
-    // create object again
-    if(killCountTrack > 0){
-        for(let i = 0; i < killCountTrack;i++){
-            games.gameFunctions.createObject();
-        }
-    }
-
-    // updateKill CountTrack
-    if(killCountTrack+1 > 10){
-        games.asset.killCountTrack = -44;
-    }
-
-    // show message 
-    if(score % 50 == 0 && score ){
-        games.object.message.classList.add('show-message');
-    }
-}
-
-// createObject functions
-games.gameFunctions.createObject = ()=>{
-    // extract games asset object
-    let {
-        objectList:list,
-        objectListLength:length,
-        colorList,
-        colorListLength
-    } = games.asset;
-
-    // get random object and property
-    let randomObject = list[Math.floor(Math.random()*length)];
-    let randomColor = colorList[Math.floor(Math.random()*colorListLength)];
-    let randomDegree = Math.floor(Math.random()*360)+'deg';
-    let [positionLeft,positionTop] = games.gameFunctions.getRandomPosition();
-
-    // create div and innerHTML
-    let div = document.createElement('div');
-    let p = document.createElement('p');
-    p.innerHTML = randomObject;
-    p.style.color = randomColor;
-    p.style.transform = `rotate(${randomDegree})`;
-    div.appendChild(p);
+  function createObject() {
+    if (!state.playing) return;
+    var item = pick(state.list);
+    var pos = getRandomPosition();
+    var div = document.createElement('div');
     div.className = 'game-object';
+    var sym = document.createElement('div');
+    sym.className = 'sym';
+    if (state.category === 'animal' || state.category === 'object') sym.innerHTML = svgIcon(item, state.category);
+    else sym.textContent = item;
+    sym.style.color = pick(data.colors);
+    sym.style.transform = 'rotate(' + Math.floor(Math.random() * 360) + 'deg)';
+    div.appendChild(sym);
+    div.style.left = pos[0] + 'px';
+    div.style.top = pos[1] + 'px';
+    div.dataset.fx = pos[0] / el.field.clientWidth;
+    div.dataset.fy = pos[1] / el.field.clientHeight;
+    el.field.appendChild(div);
+  }
 
-    // set div position
-    div.style.left = positionLeft;
-    div.style.top = positionTop;
+  function deleteObject(o) {
+    o.classList.add('hide-object');
+    o.dataset.dead = '1';
+    setTimeout(function () { if (o.parentNode) o.parentNode.removeChild(o); }, 300);
+  }
 
-    // add event listener on div
-    div.addEventListener('click',()=>{
-        games.gameFunctions.kill(div);
-    });
+  function popText(x, y) {
+    var p = document.createElement('div');
+    p.className = 'pop';
+    p.textContent = '+1';
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+    el.field.appendChild(p);
+    setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 600);
+  }
 
-    // append child inside the game screen
-    games.object.gameScreen.appendChild(div);
-}
+  function kill(o) {
+    deleteObject(o);
+    popText(parseFloat(o.style.left), parseFloat(o.style.top) - symSize() / 2);
+    el.hint.classList.remove('show');
 
-// startGames function
-games.gameFunctions.startGames = ()=>{
-    // extract function from gameFunction
-    let {
-        startTiming,
-        createObject
-    } = games.gameFunctions;
+    var score = ++state.score;
+    el.score.textContent = score;
+    var killCountTrack = ++state.killCountTrack;
 
-    // start the time
-    games.asset.timeInterval = setInterval(startTiming,1000);
+    // each click spawns a growing burst of new symbols, then the flood pauses
+    if (killCountTrack > 0) {
+      for (var i = 0; i < killCountTrack; i++) createObject();
+    }
+    if (killCountTrack + 1 > 10) state.killCountTrack = -44;
 
-    // createObject
-    setTimeout(createObject,1000);
-}
+    // safety net: never leave the board empty
+    if (!el.field.querySelector('.game-object:not([data-dead])')) createObject();
 
-// continueGames function
-games.gameFunctions.continueGames = ()=>{
-    // hide message
-    games.object.message.classList.remove('show-message');
-}
+    if (score % 50 === 0) showCheckpoint(score);
+  }
 
-// reset games
-games.gameFunctions.resetGames = ()=>{
-    // get all object and delete object from ui
-    let allObject = document.querySelectorAll('.game-object');
+  el.field.addEventListener('pointerdown', function (e) {
+    if (!state.playing || !state.running) return;
+    var o = e.target.closest ? e.target.closest('.game-object') : null;
+    if (!o || o.dataset.dead) return;
+    e.preventDefault();
+    kill(o);
+  });
 
-    allObject.forEach(object=>{
-        object.classList.add('hide-object');
-        setTimeout(()=>{
-            object.remove();
-        },400);
-    })
+  // ---------- flow ----------
+  function clearField() {
+    clearTimeout(state.spawnTimeout);
+    el.field.innerHTML = '';
+  }
 
-    // hide message 
-    games.object.message.classList.remove('show-message');
-    
-    // clear timer and reset time and score
-    clearInterval(games.asset.timeInterval);
-    games.asset.time = 0;
-    games.asset.score = 0;
-    games.asset.killCountTrack = 1;
+  function startGame() {
+    clearField();
+    el.message.hidden = true;
+    el.results.hidden = true;
+    el.paused.hidden = true;
+    state.score = 0;
+    state.elapsed = 0;
+    state.killCountTrack = 1;
+    state.playing = true;
+    el.score.textContent = '0';
+    el.time.textContent = '00:00';
+    applySymSize();
+    startTimer();
+    el.hint.classList.add('show');
+    state.spawnTimeout = setTimeout(createObject, 650);
+  }
 
-    // reset ui
-    games.object.timeSpan.innerText = '00:00';
-    games.object.scoreSpan.innerText = '00';
+  function selectOne(cat) {
+    state.category = cat;
+    state.list = data[cat];
+    el.optionScreen.classList.add('up-screen');
+    startGame();
+  }
 
-    // back start screen
-    games.object.optionScreen.classList.remove('up-screen');
-    games.object.startScreen.classList.remove('up-screen');
-}
+  function showCheckpoint(score) {
+    stopTimer();
+    el.checkpointScore.textContent = score;
+    el.message.hidden = false;
+  }
 
-// extract gamesFunctions
-let {
-    play,
-    selectOne,
-    continueGames,
-    resetGames
-} = games.gameFunctions;
+  function endGame() {
+    if (!state.playing) return;
+    stopTimer();
+    state.playing = false;
+    clearTimeout(state.spawnTimeout);
+    el.message.hidden = true;
+    el.paused.hidden = true;
+    el.hint.classList.remove('show');
+    var isBest = state.score > best;
+    if (isBest) { best = state.score; save(KEY_BEST, best); }
+    el.finalScore.textContent = state.score;
+    el.finalTime.textContent = fmtTime(state.elapsed);
+    el.finalBest.textContent = best;
+    el.newBest.hidden = !isBest;
+    el.results.hidden = false;
+    updateBestLine();
+  }
 
-// add event listener on playButton
-games.object.playButton.addEventListener('click',play);
+  function backToMenu() {
+    clearField();
+    el.results.hidden = true;
+    el.optionScreen.classList.remove('up-screen');
+    el.startScreen.classList.remove('up-screen');
+  }
 
-// add event listener on all options
-games.object.optionButtons.forEach(option=>{
-    // add event listener on option
-    option.addEventListener('click',()=>{
-        selectOne(option);
-    });
-})
+  // ---------- pause when the page is hidden ----------
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden && state.playing && state.running) {
+      stopTimer();
+      el.paused.hidden = false;
+    }
+  });
 
-// add event listener on noButton
-games.object.noButton.addEventListener('click',continueGames);
+  // ---------- buttons ----------
+  function onTap(id, fn) {
+    $(id).addEventListener('click', fn);
+  }
+  onTap('play-btn', function () { el.startScreen.classList.add('up-screen'); });
+  onTap('back-btn', function () { el.startScreen.classList.remove('up-screen'); });
+  Array.prototype.forEach.call(document.querySelectorAll('.option'), function (b) {
+    b.addEventListener('click', function () { selectOne(b.getAttribute('data-cat')); });
+  });
+  onTap('no-btn', function () { el.message.hidden = true; startTimer(); });
+  onTap('yes-btn', endGame);
+  onTap('end-btn', endGame);
+  onTap('again-btn', startGame);
+  onTap('menu-btn', backToMenu);
+  onTap('resume-btn', function () { el.paused.hidden = true; startTimer(); });
 
-// add event listener on yesButton
-games.object.yseButton.addEventListener('click',resetGames);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && state.playing) {
+      if (!el.paused.hidden) { el.paused.hidden = true; startTimer(); }
+      else if (el.message.hidden) { stopTimer(); el.paused.hidden = false; }
+    }
+  });
+  document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+})();
